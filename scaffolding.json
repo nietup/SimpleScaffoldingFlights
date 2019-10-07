@@ -1,0 +1,15 @@
+{
+  "profile": "default",
+  "input_directory": "src/main/java/mgr/flights/simplescaffolding",
+  "output_directory": "src/main/java/mgr/flights/simplescaffolding",
+  "template_location": "src/test/resources/scaffolding",
+  "base_package": "mgr.flights.simplescaffolding",
+  "read": true,
+  "only_with_entity_directives": false,
+  "entities": [
+    "City"
+  ],
+  "user_token_map": {
+    "PORT": "1000"
+  }
+}

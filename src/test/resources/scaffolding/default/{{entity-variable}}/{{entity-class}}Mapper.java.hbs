@@ -1,0 +1,10 @@
+package {{package}}.{{entity-variable}};
+
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface {{entity-class}}Mapper {
+    {{entity-class}} to{{entity-class}}({{entity-class}}Dto {{entity-variable}}Dto);
+
+    {{entity-class}}Dto toDto({{entity-class}} {{entity-variable}});
+}

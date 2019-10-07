@@ -1,0 +1,53 @@
+package {{package}}.{{entity-variable}};
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class {{entity-class}}Service {
+
+    @NonNull
+    private final {{entity-class}}Repository {{entity-variable}}Repository;
+    @NonNull
+    private final {{entity-class}}Mapper {{entity-variable}}Mapper;
+
+    public Optional<{{entity-class}}Dto> get{{entity-class}}ById(Integer id) {
+        return {{entity-variable}}Repository
+                .findById(id)
+                .map({{entity-variable}}Mapper::toDto);
+    }
+
+    public List<{{entity-class}}Dto> getAllFor{{entity-class}}() {
+        return {{entity-variable}}Repository
+                .findAll()
+                .stream()
+                .map({{entity-variable}}Mapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public {{entity-class}}Dto create{{entity-class}}({{entity-class}}Dto {{entity-variable}}Dto) {
+        {{entity-class}} {{entity-variable}} = {{entity-variable}}Mapper.to{{entity-class}}({{entity-variable}}Dto);
+        {{entity-class}} saved{{entity-class}} = {{entity-variable}}Repository.save({{entity-variable}});
+        return {{entity-variable}}Mapper.toDto(saved{{entity-class}});
+    }
+
+    public Optional<{{entity-class}}Dto> update{{entity-class}}({{entity-class}}Dto {{entity-variable}}Dto) {
+        {{entity-class}} {{entity-variable}} = {{entity-variable}}Mapper.to{{entity-class}}({{entity-variable}}Dto);
+
+        return {{entity-variable}}Repository
+                .findById({{entity-variable}}.get{{entity-class}}Id()).isPresent() ?
+                Optional.of({{entity-variable}}Repository.save({{entity-variable}})).map({{entity-variable}}Mapper::toDto) :
+                Optional.empty();
+    }
+
+    public void delete{{entity-class}}(Integer id) {
+        {{entity-variable}}Repository.deleteById(id);
+    }
+}

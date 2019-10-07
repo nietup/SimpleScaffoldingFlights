@@ -1,0 +1,61 @@
+package {{package}}.{{entity-variable}};
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import {{package}}.exception.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/api/{{entity-variable}}")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class {{entity-class}}Controller {
+    @NonNull
+    private final {{entity-class}}Service {{entity-variable}}Service;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<{{entity-class}}Dto> get{{entity-class}}ById(@PathVariable Integer id) {
+        {{entity-class}}Dto {{entity-variable}}Dto = {{entity-variable}}Service.get{{entity-class}}ById(id).orElseThrow(NotFoundException::new);
+        return ResponseEntity.ok().body({{entity-variable}}Dto);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<{{entity-class}}Dto>> getAllFor{{entity-class}}() {
+        List<{{entity-class}}Dto> {{entity-variable}}DtoList = {{entity-variable}}Service.getAllFor{{entity-class}}();
+        return ResponseEntity.ok().body({{entity-variable}}DtoList);
+    }
+
+    @PostMapping
+    public ResponseEntity<{{entity-class}}Dto> create{{entity-class}}(@RequestBody {{entity-class}}Dto {{entity-variable}}Dto) {
+        if ({{entity-variable}}Dto.get{{entity-class}}Id() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "{{entity-class}}Id must be null when creating {{entity-variable}}");
+        }
+
+        {{entity-class}}Dto saved{{entity-class}}Dto = {{entity-variable}}Service.create{{entity-class}}({{entity-variable}}Dto);
+        return ResponseEntity.ok().body(saved{{entity-class}}Dto);
+    }
+
+    @PutMapping
+    public ResponseEntity<{{entity-class}}Dto> update{{entity-class}}(@RequestBody {{entity-class}}Dto {{entity-variable}}Dto) {
+        if ({{entity-variable}}Dto.get{{entity-class}}Id() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "{{entity-class}}Id must not be null when updating {{entity-variable}}");
+        }
+
+        {{entity-class}}Dto saved{{entity-class}}Dto = {{entity-variable}}Service.update{{entity-class}}({{entity-variable}}Dto)
+                .orElseThrow(NotFoundException::new);
+
+        return ResponseEntity.ok().body(saved{{entity-class}}Dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete{{entity-class}}(@PathVariable Integer id) {
+        {{entity-variable}}Service.delete{{entity-class}}(id);
+        return ResponseEntity.noContent().build();
+    }
+}

@@ -20,37 +20,37 @@ public class CityController {
     private final CityService cityService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<City> getCityById(@PathVariable Integer id) {
-        City city = cityService.getCityById(id).orElseThrow(NotFoundException::new);
-        return ResponseEntity.ok().body(city);
+    public ResponseEntity<CityDto> getCityById(@PathVariable Integer id) {
+        CityDto cityDto = cityService.getCityById(id).orElseThrow(NotFoundException::new);
+        return ResponseEntity.ok().body(cityDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<City>> getAllForCity() {
-        List<City> cityList = cityService.getAllForCity();
-        return ResponseEntity.ok().body(cityList);
+    public ResponseEntity<List<CityDto>> getAllForCity() {
+        List<CityDto> cityDtoList = cityService.getAllForCity();
+        return ResponseEntity.ok().body(cityDtoList);
     }
 
     @PostMapping
-    public ResponseEntity<City> createCity(@RequestBody City city) {
-        if (city.getCityId() != null) {
+    public ResponseEntity<CityDto> createCity(@RequestBody CityDto cityDto) {
+        if (cityDto.getCityId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CityId must be null when creating city");
         }
 
-        City savedCity = cityService.createCity(city);
-        return ResponseEntity.ok().body(savedCity);
+        CityDto savedCityDto = cityService.createCity(cityDto);
+        return ResponseEntity.ok().body(savedCityDto);
     }
 
     @PutMapping
-    public ResponseEntity<City> updateCity(@RequestBody City city) {
-        if (city.getCityId() == null) {
+    public ResponseEntity<CityDto> updateCity(@RequestBody CityDto cityDto) {
+        if (cityDto.getCityId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CityId must not be null when updating city");
         }
 
-        City savedCity = cityService.updateCity(city)
+        CityDto savedCityDto = cityService.updateCity(cityDto)
                 .orElseThrow(NotFoundException::new);
 
-        return ResponseEntity.ok().body(savedCity);
+        return ResponseEntity.ok().body(savedCityDto);
     }
 
     @DeleteMapping("/{id}")

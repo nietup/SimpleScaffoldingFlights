@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -17,22 +18,32 @@ public class CityService {
     @NonNull
     private final CityMapper cityMapper;
 
-    public Optional<City> getCityById(Integer id) {
-        return cityRepository.findById(id);
+    public Optional<CityDto> getCityById(Integer id) {
+        return cityRepository
+                .findById(id)
+                .map(cityMapper::toDto);
     }
 
-    public List<City> getAllForCity() {
-        return cityRepository.findAll();
+    public List<CityDto> getAllForCity() {
+        return cityRepository
+                .findAll()
+                .stream()
+                .map(cityMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public City createCity(City city) {
-        CityDto ddd = cityMapper.toDto(city);
-        return cityRepository.save(city);
+    public CityDto createCity(CityDto cityDto) {
+        City city = cityMapper.toCity(cityDto);
+        City savedCity = cityRepository.save(city);
+        return cityMapper.toDto(savedCity);
     }
 
-    public Optional<City> updateCity(City city) {
-        return cityRepository.findById(city.getCityId()).isPresent() ?
-                Optional.of(cityRepository.save(city)) :
+    public Optional<CityDto> updateCity(CityDto cityDto) {
+        City city = cityMapper.toCity(cityDto);
+
+        return cityRepository
+                .findById(city.getCityId()).isPresent() ?
+                Optional.of(cityRepository.save(city)).map(cityMapper::toDto) :
                 Optional.empty();
     }
 

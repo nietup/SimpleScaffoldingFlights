@@ -1,5 +1,7 @@
 package mgr.flights.simplescaffolding.city;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import mgr.flights.simplescaffolding.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,13 +14,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/city")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CityController {
+    @NonNull
     private final CityService cityService;
-
-    @Autowired
-    public CityController(CityService cityService) {
-        this.cityService = cityService;
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<City> getCityById(@PathVariable Integer id) {
@@ -27,9 +26,9 @@ public class CityController {
     }
 
     @GetMapping
-    public ResponseEntity<List<City>> getAllCities() {
-        List<City> cities = cityService.getAllCities();
-        return ResponseEntity.ok().body(cities);
+    public ResponseEntity<List<City>> getAllForCity() {
+        List<City> cityList = cityService.getAllForCity();
+        return ResponseEntity.ok().body(cityList);
     }
 
     @PostMapping

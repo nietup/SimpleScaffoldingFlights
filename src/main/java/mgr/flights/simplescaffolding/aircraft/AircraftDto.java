@@ -9,4 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AircraftDto {
     private Integer aircraftId;
+    private String model;
+    private String company;
+    private Integer seats;
 }

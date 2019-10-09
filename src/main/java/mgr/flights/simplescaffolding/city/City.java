@@ -21,10 +21,11 @@ public class City {
     @NotNull
     private Integer cityId;
 
-    @Column(name = "name")
     @NotNull
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "time_zone")
+    @NotNull
+    @Column(name = "time_zone", nullable = false)
     private Integer timeZone;
 }

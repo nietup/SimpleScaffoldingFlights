@@ -20,4 +20,14 @@ public class Aircraft {
     @GeneratedValue
     @NotNull
     private Integer aircraftId;
+
+    @Column
+    private String model;
+
+    @Column
+    private String company;
+
+    @Column
+    @NotNull
+    private Integer seats;
 }

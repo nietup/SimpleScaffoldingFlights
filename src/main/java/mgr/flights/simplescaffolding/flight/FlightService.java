@@ -18,9 +18,9 @@ public class FlightService {
     @NonNull
     private final FlightMapper flightMapper;
 
-    public Optional<FlightDto> getFlightById(Integer id) {
+    public Optional<FlightDto> getFlightByFlightNo(String flightNo) {
         return flightRepository
-                .findById(id)
+                .findByFlightNo(flightNo)
                 .map(flightMapper::toDto);
     }
 
@@ -42,12 +42,12 @@ public class FlightService {
         Flight flight = flightMapper.toFlight(flightDto);
 
         return flightRepository
-                .findById(flight.getFlightId()).isPresent() ?
+                .findByFlightNo(flight.getFlightNo()).isPresent() ?
                 Optional.of(flightRepository.save(flight)).map(flightMapper::toDto) :
                 Optional.empty();
     }
 
-    public void deleteFlight(Integer id) {
-        flightRepository.deleteById(id);
+    public void deleteFlight(String flightNo) {
+        flightRepository.deleteByFlightNo(flightNo);
     }
 }

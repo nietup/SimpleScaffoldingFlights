@@ -19,9 +19,9 @@ public class FlightController {
     @NonNull
     private final FlightService flightService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<FlightDto> getFlightById(@PathVariable Integer id) {
-        FlightDto flightDto = flightService.getFlightById(id).orElseThrow(NotFoundException::new);
+    @GetMapping("/{flightNo}")
+    public ResponseEntity<FlightDto> getFlightByFlightNo(@PathVariable String flightNo) {
+        FlightDto flightDto = flightService.getFlightByFlightNo(flightNo).orElseThrow(NotFoundException::new);
         return ResponseEntity.ok().body(flightDto);
     }
 
@@ -33,8 +33,8 @@ public class FlightController {
 
     @PostMapping
     public ResponseEntity<FlightDto> createFlight(@RequestBody FlightDto flightDto) {
-        if (flightDto.getFlightId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "FlightId must be null when creating flight");
+        if (flightDto.getFlightNo() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "FlightNo must be null when creating flight");
         }
 
         FlightDto savedFlightDto = flightService.createFlight(flightDto);
@@ -43,8 +43,8 @@ public class FlightController {
 
     @PutMapping
     public ResponseEntity<FlightDto> updateFlight(@RequestBody FlightDto flightDto) {
-        if (flightDto.getFlightId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "FlightId must not be null when updating flight");
+        if (flightDto.getFlightNo() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "FlightNo must not be null when updating flight");
         }
 
         FlightDto savedFlightDto = flightService.updateFlight(flightDto)
@@ -53,9 +53,9 @@ public class FlightController {
         return ResponseEntity.ok().body(savedFlightDto);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFlight(@PathVariable Integer id) {
-        flightService.deleteFlight(id);
+    @DeleteMapping("/{flightNo}")
+    public ResponseEntity<Void> deleteFlight(@PathVariable String flightNo) {
+        flightService.deleteFlight(flightNo);
         return ResponseEntity.noContent().build();
     }
 }

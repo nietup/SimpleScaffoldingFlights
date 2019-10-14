@@ -19,9 +19,9 @@ public class AirportController {
     @NonNull
     private final AirportService airportService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AirportDto> getAirportById(@PathVariable Integer id) {
-        AirportDto airportDto = airportService.getAirportById(id).orElseThrow(NotFoundException::new);
+    @GetMapping("/{iata}")
+    public ResponseEntity<AirportDto> getAirportByIata(@PathVariable String iata) {
+        AirportDto airportDto = airportService.getAirportByIata(iata).orElseThrow(NotFoundException::new);
         return ResponseEntity.ok().body(airportDto);
     }
 
@@ -33,8 +33,8 @@ public class AirportController {
 
     @PostMapping
     public ResponseEntity<AirportDto> createAirport(@RequestBody AirportDto airportDto) {
-        if (airportDto.getAirportId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AirportId must be null when creating airport");
+        if (airportDto.getIata() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AirportIata must be null when creating airport");
         }
 
         AirportDto savedAirportDto = airportService.createAirport(airportDto);
@@ -43,8 +43,8 @@ public class AirportController {
 
     @PutMapping
     public ResponseEntity<AirportDto> updateAirport(@RequestBody AirportDto airportDto) {
-        if (airportDto.getAirportId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AirportId must not be null when updating airport");
+        if (airportDto.getIata() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AirportIata must not be null when updating airport");
         }
 
         AirportDto savedAirportDto = airportService.updateAirport(airportDto)
@@ -53,9 +53,9 @@ public class AirportController {
         return ResponseEntity.ok().body(savedAirportDto);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAirport(@PathVariable Integer id) {
-        airportService.deleteAirport(id);
+    @DeleteMapping("/{iata}")
+    public ResponseEntity<Void> deleteAirport(@PathVariable String iata) {
+        airportService.deleteAirport(iata);
         return ResponseEntity.noContent().build();
     }
 }

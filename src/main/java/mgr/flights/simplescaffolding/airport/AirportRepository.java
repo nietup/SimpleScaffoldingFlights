@@ -2,6 +2,11 @@ package mgr.flights.simplescaffolding.airport;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AirportRepository extends JpaRepository<Airport, Integer> {
+import java.util.Optional;
 
+public interface AirportRepository extends JpaRepository<Airport, String> {
+
+    Optional<Airport> findByIata(String iata);
+
+    void deleteByIata(String iata);
 }

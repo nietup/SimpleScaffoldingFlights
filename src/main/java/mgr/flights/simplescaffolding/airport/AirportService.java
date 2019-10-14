@@ -18,9 +18,9 @@ public class AirportService {
     @NonNull
     private final AirportMapper airportMapper;
 
-    public Optional<AirportDto> getAirportById(Integer id) {
+    public Optional<AirportDto> getAirportByIata(String iata) {
         return airportRepository
-                .findById(id)
+                .findByIata(iata)
                 .map(airportMapper::toDto);
     }
 
@@ -42,12 +42,12 @@ public class AirportService {
         Airport airport = airportMapper.toAirport(airportDto);
 
         return airportRepository
-                .findById(airport.getAirportId()).isPresent() ?
+                .findByIata(airport.getIata()).isPresent() ?
                 Optional.of(airportRepository.save(airport)).map(airportMapper::toDto) :
                 Optional.empty();
     }
 
-    public void deleteAirport(Integer id) {
-        airportRepository.deleteById(id);
+    public void deleteAirport(String iata) {
+        airportRepository.deleteByIata(iata);
     }
 }

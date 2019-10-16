@@ -18,12 +18,6 @@ public class CityService {
     @NonNull
     private final CityMapper cityMapper;
 
-    public Optional<CityDto> getCityById(Integer id) {
-        return cityRepository
-                .findById(id)
-                .map(cityMapper::toDto);
-    }
-
     public List<CityDto> getAllForCity() {
         return cityRepository
                 .findAll()
@@ -49,5 +43,11 @@ public class CityService {
 
     public void deleteCity(Integer id) {
         cityRepository.deleteById(id);
+    }
+
+    public Optional<CityDto> getCityByName(String name) {
+        return cityRepository
+                .findByName(name)
+                .map(cityMapper::toDto);
     }
 }

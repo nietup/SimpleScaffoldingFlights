@@ -19,9 +19,9 @@ public class CityController {
     @NonNull
     private final CityService cityService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CityDto> getCityById(@PathVariable Integer id) {
-        CityDto cityDto = cityService.getCityById(id).orElseThrow(NotFoundException::new);
+    @GetMapping("/{name}")
+    public ResponseEntity<CityDto> getCityByName(@PathVariable String name) {
+        CityDto cityDto = cityService.getCityByName(name).orElseThrow(NotFoundException::new);
         return ResponseEntity.ok().body(cityDto);
     }
 

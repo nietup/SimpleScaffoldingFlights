@@ -50,4 +50,8 @@ public class AirportService {
     public void deleteAirport(String iata) {
         airportRepository.deleteByIata(iata);
     }
+
+    public List<Airport> getAirportByCityId(Integer cityId) {
+        return airportRepository.findByCityCityId(cityId);
+    }
 }

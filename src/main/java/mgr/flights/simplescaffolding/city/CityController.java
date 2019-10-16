@@ -2,6 +2,7 @@ package mgr.flights.simplescaffolding.city;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import mgr.flights.simplescaffolding.airport.AirportDto;
 import mgr.flights.simplescaffolding.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,11 @@ public class CityController {
     public ResponseEntity<CityDto> getCityByName(@PathVariable String name) {
         CityDto cityDto = cityService.getCityByName(name).orElseThrow(NotFoundException::new);
         return ResponseEntity.ok().body(cityDto);
+    }
+
+    @GetMapping("/{name}/airports")
+    public ResponseEntity<List<AirportDto>> getAirportsByCityName(@PathVariable String name) {
+        return ResponseEntity.ok().body(cityService.getAirportsByCityName(name));
     }
 
     @GetMapping

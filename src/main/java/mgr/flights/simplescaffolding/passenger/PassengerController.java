@@ -3,6 +3,7 @@ package mgr.flights.simplescaffolding.passenger;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import mgr.flights.simplescaffolding.exception.NotFoundException;
+import mgr.flights.simplescaffolding.flight.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,8 @@ import java.util.List;
 public class PassengerController {
     @NonNull
     private final PassengerService passengerService;
+    @NonNull
+    private final FlightService flightService;
 
     @GetMapping("/{id}")
     public ResponseEntity<PassengerDto> getPassengerById(@PathVariable Integer id) {
@@ -35,6 +38,12 @@ public class PassengerController {
     public ResponseEntity<PassengerDto> createPassenger(@RequestBody PassengerDto passengerDto) {
         if (passengerDto.getPassengerId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PassengerId must be null when creating passenger");
+        }
+        if (passengerDto.getFlightNo() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "FlightNo must not be null when creating passenger");
+        }
+        if (!flightService.hasFreeSeats(passengerDto.getFlightNo())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chosen flights has no seats available");
         }
 
         PassengerDto savedPassengerDto = passengerService.createPassenger(passengerDto);

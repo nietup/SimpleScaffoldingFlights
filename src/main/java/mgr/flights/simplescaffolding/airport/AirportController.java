@@ -33,8 +33,8 @@ public class AirportController {
 
     @PostMapping
     public ResponseEntity<AirportDto> createAirport(@RequestBody AirportDto airportDto) {
-        if (airportDto.getIata() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AirportIata must be null when creating airport");
+        if (airportDto.getIata() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AirportIata must not be null when creating airport");
         }
 
         AirportDto savedAirportDto = airportService.createAirport(airportDto);

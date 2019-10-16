@@ -33,8 +33,8 @@ public class FlightController {
 
     @PostMapping
     public ResponseEntity<FlightDto> createFlight(@RequestBody FlightDto flightDto) {
-        if (flightDto.getFlightNo() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "FlightNo must be null when creating flight");
+        if (flightDto.getFlightNo() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "FlightNo must not be null when creating flight");
         }
 
         FlightDto savedFlightDto = flightService.createFlight(flightDto);

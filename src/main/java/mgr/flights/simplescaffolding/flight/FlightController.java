@@ -3,6 +3,7 @@ package mgr.flights.simplescaffolding.flight;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import mgr.flights.simplescaffolding.exception.NotFoundException;
+import mgr.flights.simplescaffolding.passenger.PassengerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,11 @@ public class FlightController {
     public ResponseEntity<FlightDto> getFlightByFlightNo(@PathVariable String flightNo) {
         FlightDto flightDto = flightService.getFlightByFlightNo(flightNo).orElseThrow(NotFoundException::new);
         return ResponseEntity.ok().body(flightDto);
+    }
+
+    @GetMapping("/{flightNo}/passengers")
+    public ResponseEntity<List<PassengerDto>> getPassengersByFlightNo(@PathVariable String flightNo) {
+        return ResponseEntity.ok().body(flightService.getPassengersByFlightNo(flightNo));
     }
 
     @GetMapping

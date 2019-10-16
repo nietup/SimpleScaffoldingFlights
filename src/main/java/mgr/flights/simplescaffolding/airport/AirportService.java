@@ -51,7 +51,11 @@ public class AirportService {
         airportRepository.deleteByIata(iata);
     }
 
-    public List<Airport> getAirportByCityId(Integer cityId) {
-        return airportRepository.findByCityCityId(cityId);
+    public List<AirportDto> getAirportByCityId(Integer cityId) {
+        return airportRepository
+                .findByCityCityId(cityId)
+                .stream()
+                .map(airportMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

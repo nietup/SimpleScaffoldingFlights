@@ -3,7 +3,6 @@ package mgr.flights.simplescaffolding.city;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import mgr.flights.simplescaffolding.airport.AirportDto;
-import mgr.flights.simplescaffolding.airport.AirportMapper;
 import mgr.flights.simplescaffolding.airport.AirportService;
 import mgr.flights.simplescaffolding.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,6 @@ public class CityService {
     private final CityMapper cityMapper;
     @NonNull
     private final AirportService airportService;
-    @NonNull
-    private final AirportMapper airportMapper;
 
     public List<CityDto> getAllForCity() {
         return cityRepository
@@ -61,10 +58,6 @@ public class CityService {
 
     public List<AirportDto> getAirportsByCityName(String name) {
         Integer cityId = getCityByName(name).orElseThrow(NotFoundException::new).getCityId();
-        return airportService
-                .getAirportByCityId(cityId)
-                .stream()
-                .map(airportMapper::toDto)
-                .collect(Collectors.toList());
+        return airportService.getAirportByCityId(cityId);
     }
 }

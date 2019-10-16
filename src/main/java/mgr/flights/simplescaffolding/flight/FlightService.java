@@ -2,6 +2,8 @@ package mgr.flights.simplescaffolding.flight;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import mgr.flights.simplescaffolding.passenger.PassengerDto;
+import mgr.flights.simplescaffolding.passenger.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ public class FlightService {
     private final FlightRepository flightRepository;
     @NonNull
     private final FlightMapper flightMapper;
+    @NonNull
+    private final PassengerService passengerService;
 
     public Optional<FlightDto> getFlightByFlightNo(String flightNo) {
         return flightRepository
@@ -49,5 +53,9 @@ public class FlightService {
 
     public void deleteFlight(String flightNo) {
         flightRepository.deleteByFlightNo(flightNo);
+    }
+
+    public List<PassengerDto> getPassengersByFlightNo(String flightNo) {
+        return passengerService.getPassengersByFlightNo(flightNo);
     }
 }

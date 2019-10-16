@@ -50,4 +50,12 @@ public class PassengerService {
     public void deletePassenger(Integer id) {
         passengerRepository.deleteById(id);
     }
+
+    public List<PassengerDto> getPassengersByFlightNo(String flightNo) {
+        return passengerRepository
+                .findAllByFlightFlightNo(flightNo)
+                .stream()
+                .map(passengerMapper::toDto)
+                .collect(Collectors.toList());
+    }
 }

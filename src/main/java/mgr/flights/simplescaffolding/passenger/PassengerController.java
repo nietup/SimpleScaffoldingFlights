@@ -55,6 +55,9 @@ public class PassengerController {
         if (passengerDto.getPassengerId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PassengerId must not be null when updating passenger");
         }
+        if (passengerService.changedFlights(passengerDto) && !flightService.hasFreeSeats(passengerDto.getFlightNo())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chosen flights has no seats available");
+        }
 
         PassengerDto savedPassengerDto = passengerService.updatePassenger(passengerDto)
                 .orElseThrow(NotFoundException::new);

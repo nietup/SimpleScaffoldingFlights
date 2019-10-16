@@ -2,10 +2,12 @@ package mgr.flights.simplescaffolding.passenger;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import mgr.flights.simplescaffolding.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -57,5 +59,13 @@ public class PassengerService {
                 .stream()
                 .map(passengerMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public boolean changedFlights(PassengerDto passengerDto) {
+        Passenger oldPassenger = passengerRepository
+                .findById(passengerDto.getPassengerId())
+                .orElseThrow(NotFoundException::new);
+
+        return !Objects.equals(oldPassenger.getFlight().getFlightNo(), passengerDto.getFlightNo());
     }
 }

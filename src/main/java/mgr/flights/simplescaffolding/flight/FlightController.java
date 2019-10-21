@@ -47,6 +47,12 @@ public class FlightController {
         return ResponseEntity.ok().body(savedFlightDto);
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<List<FlightDto>> searchFlights(@RequestBody SearchRequest searchRequest) {
+        List<FlightDto> searchResults = flightService.searchFlight(searchRequest);
+        return ResponseEntity.ok().body(searchResults);
+    }
+
     @PutMapping
     public ResponseEntity<FlightDto> updateFlight(@RequestBody FlightDto flightDto) {
         if (flightDto.getFlightNo() == null) {

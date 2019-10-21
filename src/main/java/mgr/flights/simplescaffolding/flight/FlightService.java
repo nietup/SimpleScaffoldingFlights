@@ -3,12 +3,16 @@ package mgr.flights.simplescaffolding.flight;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import mgr.flights.simplescaffolding.aircraft.AircraftService;
+import mgr.flights.simplescaffolding.airport.AirportDto;
+import mgr.flights.simplescaffolding.city.CityService;
 import mgr.flights.simplescaffolding.exception.NotFoundException;
 import mgr.flights.simplescaffolding.passenger.PassengerDto;
 import mgr.flights.simplescaffolding.passenger.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,6 +29,8 @@ public class FlightService {
     private final PassengerService passengerService;
     @NonNull
     private final AircraftService aircraftService;
+    @NonNull
+    private final CityService cityService;
 
     public Optional<FlightDto> getFlightByFlightNo(String flightNo) {
         return flightRepository
@@ -78,5 +84,35 @@ public class FlightService {
                 .size();
 
         return allSeats > takenSeats;
+    }
+
+    public List<FlightDto> searchFlight(SearchRequest searchRequest) {
+        LocalDateTime minTime = searchRequest.getStartTime().minusHours(searchRequest.getTimeRange() / 2);
+        LocalDateTime maxTime = searchRequest.getStartTime().plusHours(searchRequest.getTimeRange() / 2);
+
+        List<String> startingIatas = cityService
+                .getAirportsByCityName(searchRequest.getSourceCity())
+                .stream()
+                .map(AirportDto::getIata)
+                .collect(Collectors.toList());
+
+        List<String> landingIatas = cityService
+                .getAirportsByCityName(searchRequest.getDestinationCity())
+                .stream()
+                .map(AirportDto::getIata)
+                .collect(Collectors.toList());
+        ;
+
+        List<FlightDto> resultFlights = startingIatas
+                .stream()
+                .map(flightRepository::findBySourceIata)
+                .flatMap(Collection::stream)
+                .filter(flight -> landingIatas.contains(flight.getDestination().getIata()))
+                .filter(flight -> flight.getStartTime().isAfter(minTime))
+                .filter(flight -> flight.getStartTime().isBefore(maxTime))
+                .map(flightMapper::toDto)
+                .collect(Collectors.toList());
+
+        return resultFlights;
     }
 }

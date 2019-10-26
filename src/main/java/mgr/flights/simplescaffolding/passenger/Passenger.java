@@ -43,6 +43,9 @@ public class Passenger {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "sub")
+    private String sub;
+
     @ManyToOne(optional = false)
     @NotNull
     private Flight flight;

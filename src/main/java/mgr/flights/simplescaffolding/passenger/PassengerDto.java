@@ -16,5 +16,6 @@ public class PassengerDto {
     private String city;
     private String countryCode;
     private String phone;
+    private String sub;
     private String flightNo;
 }

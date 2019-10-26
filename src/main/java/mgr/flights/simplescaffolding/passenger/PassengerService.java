@@ -68,4 +68,8 @@ public class PassengerService {
 
         return !Objects.equals(oldPassenger.getFlight().getFlightNo(), passengerDto.getFlightNo());
     }
+
+    public List<Passenger> getPassengersBySub(String sub) {
+        return passengerRepository.findBySub(sub);
+    }
 }

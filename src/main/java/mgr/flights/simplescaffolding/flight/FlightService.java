@@ -6,7 +6,7 @@ import mgr.flights.simplescaffolding.aircraft.AircraftService;
 import mgr.flights.simplescaffolding.airport.AirportDto;
 import mgr.flights.simplescaffolding.city.CityService;
 import mgr.flights.simplescaffolding.exception.NotFoundException;
-import mgr.flights.simplescaffolding.passenger.PassengerDto;
+import mgr.flights.simplescaffolding.passenger.Passenger;
 import mgr.flights.simplescaffolding.passenger.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,10 +65,6 @@ public class FlightService {
         flightRepository.deleteByFlightNo(flightNo);
     }
 
-    public List<PassengerDto> getPassengersByFlightNo(String flightNo) {
-        return passengerService.getPassengersByFlightNo(flightNo);
-    }
-
     public boolean hasFreeSeats(String flightNo) {
         Flight flight = flightRepository
                 .findByFlightNo(flightNo)
@@ -114,5 +110,17 @@ public class FlightService {
                 .collect(Collectors.toList());
 
         return resultFlights;
+    }
+
+    public List<FlightDto> getFlightsByPassengerSub(String sub) {
+        return passengerService
+                .getPassengersBySub(sub)
+                .stream()
+                .map(Passenger::getFlight)
+                .map(Flight::getFlightNo)
+                .map(this::getFlightByFlightNo)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 }

@@ -6,7 +6,8 @@ import mgr.flights.simplescaffolding.aircraft.AircraftService;
 import mgr.flights.simplescaffolding.airport.AirportDto;
 import mgr.flights.simplescaffolding.city.CityService;
 import mgr.flights.simplescaffolding.exception.NotFoundException;
-import mgr.flights.simplescaffolding.passenger.Passenger;
+import mgr.flights.simplescaffolding.passenger.PassengerFlightDto;
+import mgr.flights.simplescaffolding.passenger.PassengerFlightMapper;
 import mgr.flights.simplescaffolding.passenger.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ public class FlightService {
     private final AircraftService aircraftService;
     @NonNull
     private final CityService cityService;
+    @NonNull
+    private final PassengerFlightMapper passengerFlightMapper;
 
     public Optional<FlightDto> getFlightByFlightNo(String flightNo) {
         return flightRepository
@@ -112,15 +115,15 @@ public class FlightService {
         return resultFlights;
     }
 
-    public List<FlightDto> getFlightsByPassengerSub(String sub) {
+    public List<PassengerFlightDto> getFlightsByPassengerSub(String sub) {
         return passengerService
                 .getPassengersBySub(sub)
                 .stream()
-                .map(Passenger::getFlight)
-                .map(Flight::getFlightNo)
-                .map(this::getFlightByFlightNo)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .map(passenger -> {
+                    FlightDto flight = getFlightByFlightNo(passenger.getFlight().getFlightNo())
+                            .orElseThrow(NotFoundException::new);
+                    return passengerFlightMapper.toDto(passenger, flight);
+                })
                 .collect(Collectors.toList());
     }
 }
